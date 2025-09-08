@@ -4,7 +4,7 @@
 #include <esp_wifi.h>
 
 // MAC address of the receiver ESP32 (change for sender!)
-uint8_t receiverMAC[] = {0x24, 0x6F, 0x28, 0xAB, 0xCD, 0xEF};
+uint8_t receiverMAC[] = {0x84, 0x1F, 0xE8, 0x27, 0x85, 0x44};
 
 // Data structure for messages
 typedef struct struct_message {
@@ -15,7 +15,7 @@ struct_message outgoing;
 struct_message incoming;
 
 // Role: set true for sender, false for receiver
-#define IS_SENDER true
+#define IS_SENDER false
 
 // Callback for data sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
