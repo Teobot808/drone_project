@@ -1,15 +1,31 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#include <Arduino.h>
+#include "mavlink_functions.h"
 
 
-// Serial (Pixhawk TELEM1) pins
-#define PIXHAWK_RX_PIN 16
-#define PIXHAWK_TX_PIN 17
-#define PIXHAWK_BAUD 57600
+// FreeRTOS task handles
+TaskHandle_t Task_MAVLink_Handle;
+TaskHandle_t Task_Sensors_Handle;
+TaskHandle_t Task_Computation_Handle;
+TaskHandle_t Task_Communication_Handle;
 
+// Task priorities (higher number = higher priority)
+#define PRIORITY_MAVLINK 3      // High priority for flight-critical data
+#define PRIORITY_SENSORS 2      // Medium-high for sensor reading
+#define PRIORITY_COMPUTATION 1  // Medium for processing
+#define PRIORITY_COMMUNICATION 1 // Medium for SPI communication
 
-// MAVLink communication queue
-#define MAVLINK_QUEUE_LENGTH 16
+// Core assignment
+#define CORE_PROTOCOL 0  // Core 0: Arduino loop, MAVLink, Communications
+#define CORE_COMPUTE 1   // Core 1: Heavy computation, sensor processing
 
+// Task timing
+#define MAVLINK_UPDATE_RATE 50       // 50ms = 20Hz
+#define TELEMETRY_PRINT_RATE 1000    // 1000ms = 1Hz
+#define HEARTBEAT_RATE 1000          // 1000ms = 1Hz
 
-#endif // CONFIG_H
+// Global status flags
+volatile bool system_initialized = false;
+volatile bool emergency_stop = false;
+
+// Serial for Pixhawk (UART2)
+HardwareSerial PixhawkSerial(2);
